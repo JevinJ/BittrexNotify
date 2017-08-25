@@ -1,4 +1,5 @@
 import tkinter as tk
+import time
 import threading
 import slowtick
 import fasttick
@@ -216,14 +217,14 @@ class Application(tk.Frame, threading.Thread):
         self.m_ticker_data = slowtick.heartbeat()
         self.mListUpdate()
         self.update()
-        self.after(600000, self.mTickerDataUpdate)
+        self.slowTimerValue = 600
 
     def rTickerDataUpdate(self):
         self.r_ticker_data.clear()
         self.r_ticker_data = fasttick.heartbeat()
         self.rListUpdate()
         self.update()
-        self.after(10000, self.rTickerDataUpdate)
+        self.fastTimerValue = 10
 
     def onVsb(self, *args):
         self.mListName.yview(*args)
@@ -262,7 +263,7 @@ class Application(tk.Frame, threading.Thread):
 
     def slowTimerUpdate(self):
         if self.slowTimerValue == 0:
-            self.slowTimerValue = 600
+            self.mTickerDataUpdate()
         values = divmod(self.slowTimerValue, 60)
         minutes = values[0]
         seconds = values[1]
@@ -276,7 +277,7 @@ class Application(tk.Frame, threading.Thread):
 
     def fastTimerUpdate(self):
         if self.fastTimerValue == 0:
-            self.fastTimerValue = 10
+            self.rTickerDataUpdate()
         seconds = self.fastTimerValue
         self.fastTimerDisp.config(text=str(seconds))
         self.fastTimerValue -= 1

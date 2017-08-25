@@ -57,7 +57,7 @@ def heartbeat():
             if prev_changes:
                 average_rate = (sum(prev_changes) / len(prev_changes))
                 volume = latest_data.get(name, {}).get('Summary', {}).get('BaseVolume', 0)
-                if average_rate >= .03:
+                if average_rate >= .3:
                     ticker_data.append([name, '+{:.02f}'.format(average_rate)+'%', '{:.02f}'.format(volume)])
 
     save_pickle(latest_data)
