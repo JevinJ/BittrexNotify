@@ -11,7 +11,7 @@ class Application(tk.Frame, threading.Thread):
         self.start()
         self.grid()
 
-        #slowtick.delete_pickle()
+        slowtick.delete_pickle()
         fasttick.delete_pickle()
 
         self.down_arrow = tk.PhotoImage(file='images/arrow1.png')
