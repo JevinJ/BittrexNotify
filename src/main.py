@@ -4,6 +4,9 @@ import slowtick
 import fasttick
 
 
+SLOWTICK_RATE = 600
+FASTTICK_RATE = 15
+
 class Application(tk.Frame, threading.Thread):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
@@ -19,16 +22,13 @@ class Application(tk.Frame, threading.Thread):
         self.no_arrow = tk.PhotoImage(file='images/arrow3.png')
         self.m_ticker_data = []
         self.r_ticker_data = []
-        self.slowTimerValue = 600
-        self.fastTimerValue = 10
+        self.slowTimerValue = SLOWTICK_RATE
+        self.fastTimerValue = FASTTICK_RATE
         
         self.create_buttons()
         self.create_labels()
         self.create_lists()
         self.create_timers()
-
-        self.m_ticker_data_update()
-        self.r_ticker_data_update()
 
         self.slow_timer_update()
         self.fast_timer_update()
@@ -128,10 +128,10 @@ class Application(tk.Frame, threading.Thread):
 
     def create_lists(self):
         self.mYBarBuf = tk.Frame(bg='#262626', width=18)
-        self.mYBarBuf.grid(row=0, rowspan=2, column=4, sticky=tk.N+tk.S)
+        self.mYBarBuf.grid(row=0, rowspan=2, column=4, sticky='NS')
 
         self.mYScroll = tk.Scrollbar(orient=tk.VERTICAL, command=self.on_vsb)
-        self.mYScroll.grid(row=2, column=4, sticky=tk.N+tk.S)
+        self.mYScroll.grid(row=2, column=4, sticky='NS')
 
         self.mListName = tk.Listbox(activestyle='none',
             bg='#2B2B2B', fg='#AFBDCC', selectbackground='#2B2B2B',
@@ -159,10 +159,10 @@ class Application(tk.Frame, threading.Thread):
 
 
         self.rYBarBuf = tk.Frame(bg='#262626', width=18)
-        self.rYBarBuf.grid(row=3, rowspan=3, column=4, sticky=tk.N+tk.S)
+        self.rYBarBuf.grid(row=3, rowspan=3, column=4, sticky='NS')
 
         self.rYScroll = tk.Scrollbar(orient=tk.VERTICAL, command=self.on_vsb)
-        self.rYScroll.grid(row=5, column=4, sticky=tk.N + tk.S)
+        self.rYScroll.grid(row=5, column=4, sticky='NS')
 
         self.rListName = tk.Listbox(activestyle='none',
             bg='#2B2B2B', fg='#AFBDCC', selectbackground='#2B2B2B',
@@ -189,20 +189,20 @@ class Application(tk.Frame, threading.Thread):
         self.rListVol.grid(row=5, column=2, sticky='NSWE')
 
     def m_list_update(self):
+        self.mListName.delete(0, tk.END)
+        self.mListChange.delete(0, tk.END)
+        self.mListVol.delete(0, tk.END)
         if self.m_ticker_data:
-            self.mListName.delete(0, tk.END)
-            self.mListChange.delete(0, tk.END)
-            self.mListVol.delete(0, tk.END)
             for i in self.m_ticker_data:
                 self.mListName.insert(tk.END, i[0])
                 self.mListChange.insert(tk.END, '{}{}{}'.format('+', i[1], '%'))
                 self.mListVol.insert(tk.END, i[2])
 
     def r_list_update(self):
+        self.rListName.delete(0, tk.END)
+        self.rListRate.delete(0, tk.END)
+        self.rListVol.delete(0, tk.END)
         if self.r_ticker_data:
-            self.rListName.delete(0, tk.END)
-            self.rListRate.delete(0, tk.END)
-            self.rListVol.delete(0, tk.END)
             for i in self.r_ticker_data:
                 self.rListName.insert(tk.END, i[0])
                 self.rListRate.insert(tk.END, '{}{}{}'.format('+', i[1], '%'))
@@ -213,14 +213,12 @@ class Application(tk.Frame, threading.Thread):
         self.m_ticker_data = slowtick.heartbeat()
         self.m_list_update()
         self.update()
-        self.slowTimerValue = 600
 
     def r_ticker_data_update(self):
         self.r_ticker_data.clear()
         self.r_ticker_data = fasttick.heartbeat()
         self.r_list_update()
         self.update()
-        self.fastTimerValue = 10
 
     def on_vsb(self, *args):
         self.mListName.yview(*args)
@@ -260,6 +258,7 @@ class Application(tk.Frame, threading.Thread):
     def slow_timer_update(self):
         if self.slowTimerValue == 0:
             self.m_ticker_data_update()
+            self.slowTimerValue = SLOWTICK_RATE
         values = divmod(self.slowTimerValue, 60)
         minutes = values[0]
         seconds = values[1]
@@ -274,6 +273,7 @@ class Application(tk.Frame, threading.Thread):
     def fast_timer_update(self):
         if self.fastTimerValue == 0:
             self.r_ticker_data_update()
+            self.fastTimerValue = FASTTICK_RATE
         seconds = self.fastTimerValue
         self.fastTimerDisp.config(text=str(seconds))
         self.fastTimerValue -= 1
