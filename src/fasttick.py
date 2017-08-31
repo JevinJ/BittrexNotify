@@ -7,7 +7,7 @@ import time
 import urllib3
 
 
-def delete_pickle():
+def delete_pickles():
     files = glob.glob('fast_history/*pickle')
     for file in files:
         os.remove(file)
@@ -55,11 +55,11 @@ def heartbeat():
                 old_price = prev_data[i].get(name, {}).get('Summary', {}).get('Last', 0)
                 new_price = prev_data[i+1].get(name, {}).get('Summary', {}).get('Last', 0)
                 if old_price != 0 and new_price != 0:
-                    prev_changes.append((((new_price - old_price) / old_price) * 100))
+                    prev_changes.append(((new_price - old_price) / old_price) * 100)
             if prev_changes:
                 volume = latest_data.get(name, {}).get('Summary', {}).get('BaseVolume', 0)
                 average_rate = (sum(prev_changes) / len(prev_changes))
-                if average_rate >= .3:
+                if average_rate >= .2:
                     ticker_data.append([name,
                                         float('{:.02f}'.format(average_rate)),
                                         float('{:.02f}'.format(volume))])

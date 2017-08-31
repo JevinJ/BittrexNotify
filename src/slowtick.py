@@ -7,7 +7,7 @@ import time
 import urllib3
 
 
-def delete_pickle():
+def delete_pickles():
     files = glob.glob('slow_history/*pickle')
     for file in files:
         os.remove(file)
@@ -25,7 +25,6 @@ def open_pickle():
         return []
     files.sort(key=os.path.getmtime, reverse=True)
     with open(files[0], 'rb') as f:
-        print(files[0])
         return pickle.load(f)
 
 
@@ -55,10 +54,6 @@ def heartbeat():
             if old_price != 0 and new_price != 0:
                 change = (((new_price - old_price) / old_price) * 100)
                 if change >= 3:
-                    print(name)
-                    print("OLD PRICE: " + str(old_price))
-                    print("NEW PRICE: " + str(new_price))
-                    print("CHANGE: " + str(change))
                     ticker_data.append([name,
                                         float('{:.02f}'.format(change)),
                                         float('{:.02f}'.format(volume))])

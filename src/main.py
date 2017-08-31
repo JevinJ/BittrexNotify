@@ -14,12 +14,13 @@ class Application(tk.Frame, threading.Thread):
         self.start()
         self.grid()
 
-        slowtick.delete_pickle()
-        fasttick.delete_pickle()
+        slowtick.delete_pickles()
+        fasttick.delete_pickles()
 
         self.down_arrow = tk.PhotoImage(file='images/arrow1.png')
         self.up_arrow = tk.PhotoImage(file='images/arrow2.png')
         self.no_arrow = tk.PhotoImage(file='images/arrow3.png')
+        self.notif_bell = tk.PhotoImage(file='images/notification_bell.png')
         self.m_ticker_data = []
         self.r_ticker_data = []
         self.slowTimerValue = SLOWTICK_RATE
@@ -53,6 +54,10 @@ class Application(tk.Frame, threading.Thread):
             command=lambda: self.on_m_click_sort('mSortByVol', self.m_buttons))
         self.mSortByVol.grid(row=1, column=2, sticky='NSWE')
 
+        self.mNotifBell = tk.Button(name='mNotifBell', image=self.notif_bell,
+            bg='#262626', activebackground='#3D3D3D', relief=tk.RAISED)
+        self.mNotifBell.grid(row=1, column=3, sticky='NSWE')
+
         self.m_buttons = {'mSortByName': [self.mSortByName, 0],
                           'mSortByChange': [self.mSortByChange, 1],
                           'mSortByVol': [self.mSortByVol, 2]}
@@ -71,6 +76,10 @@ class Application(tk.Frame, threading.Thread):
             bg='#262626', activebackground='#3D3D3D', relief=tk.RAISED,
             command=lambda: self.on_r_click_sort('rSortByVol', self.r_buttons))
         self.rSortByVol.grid(row=4, column=2, sticky='NSWE')
+
+        self.rNotifBell = tk.Button(name='rNotifBell', image=self.notif_bell,
+            bg='#262626', activebackground='#3D3D3D', relief=tk.RAISED)
+        self.rNotifBell.grid(row=4, column=3, sticky='NSWE')
 
         self.r_buttons = {'rSortByName': [self.rSortByName, 0],
                           'rSortByRate': [self.rSortByRate, 1],
@@ -127,65 +136,65 @@ class Application(tk.Frame, threading.Thread):
         self.rLabelVol.grid(row=3, column=2, sticky='NSWE')
 
     def create_lists(self):
-        self.mYBarBuf = tk.Frame(bg='#262626', width=18)
-        self.mYBarBuf.grid(row=0, rowspan=2, column=4, sticky='NS')
+        self.mYBarBuf = tk.Frame(bg='#262626', width=24)
+        self.mYBarBuf.grid(row=0, column=3, sticky='NS')
 
-        self.mYScroll = tk.Scrollbar(orient=tk.VERTICAL, command=self.on_vsb)
-        self.mYScroll.grid(row=2, column=4, sticky='NS')
+        self.mYScroll = tk.Scrollbar(orient=tk.VERTICAL, command=self.on_m_vsb)
+        self.mYScroll.grid(row=2, column=3, sticky='NS')
 
         self.mListName = tk.Listbox(activestyle='none',
             bg='#2B2B2B', fg='#AFBDCC', selectbackground='#2B2B2B',
             selectforeground='#AFBDCC', relief=tk.SUNKEN,
             highlightcolor='#2B2B2B', highlightbackground='#2B2B2B',
-            width=40, height=8, yscrollcommand=self.mYScroll.set)
-        self.mListName.bind('<MouseWheel>', self.on_mouse_wheel)
+            width=40, height=6, yscrollcommand=self.mYScroll.set)
+        self.mListName.bind('<MouseWheel>', self.on_m_mouse_wheel)
         self.mListName.grid(row=2, column=0, sticky='NSWE')
 
         self.mListChange = tk.Listbox(activestyle='none',
             bg='#2B2B2B', fg='#AFBDCC', selectbackground='#2B2B2B',
             selectforeground='#AFBDCC', relief=tk.SUNKEN,
             highlightcolor='#2B2B2B', highlightbackground='#2B2B2B',
-            width=8, height=8, yscrollcommand=self.mYScroll.set)
-        self.mListChange.bind('<MouseWheel>', self.on_mouse_wheel)
+            width=8, height=6, yscrollcommand=self.mYScroll.set)
+        self.mListChange.bind('<MouseWheel>', self.on_m_mouse_wheel)
         self.mListChange.grid(row=2, column=1, sticky='NSWE')
 
         self.mListVol = tk.Listbox(activestyle='none',
             bg='#2B2B2B', fg='#AFBDCC', selectbackground='#2B2B2B',
             selectforeground='#AFBDCC', relief=tk.SUNKEN,
             highlightcolor='#2B2B2B', highlightbackground='#2B2B2B',
-            width=8, height=8, yscrollcommand=self.mYScroll.set)
-        self.mListVol.bind('<MouseWheel>', self.on_mouse_wheel)
+            width=8, height=6, yscrollcommand=self.mYScroll.set)
+        self.mListVol.bind('<MouseWheel>', self.on_m_mouse_wheel)
         self.mListVol.grid(row=2, column=2, sticky='NSWE')
 
 
-        self.rYBarBuf = tk.Frame(bg='#262626', width=18)
-        self.rYBarBuf.grid(row=3, rowspan=3, column=4, sticky='NS')
+        self.rYBarBuf = tk.Frame(bg='#262626', width=24)
+        self.rYBarBuf.grid(row=3, column=3, sticky='NS')
 
-        self.rYScroll = tk.Scrollbar(orient=tk.VERTICAL, command=self.on_vsb)
-        self.rYScroll.grid(row=5, column=4, sticky='NS')
+        self.rYScroll = tk.Scrollbar(orient=tk.VERTICAL, command=self.on_r_vsb)
+        self.rYScroll.grid(row=5, column=3, sticky='NS')
 
         self.rListName = tk.Listbox(activestyle='none',
             bg='#2B2B2B', fg='#AFBDCC', selectbackground='#2B2B2B',
             selectforeground='#AFBDCC', relief=tk.SUNKEN,
             highlightcolor='#2B2B2B', highlightbackground='#2B2B2B',
-            width=40, height=8, yscrollcommand=self.rYScroll.set)
-        self.rListName.bind('<MouseWheel>', self.on_mouse_wheel)
+            width=40, height=6, yscrollcommand=self.rYScroll.set)
+        self.rListName.bind('<MouseWheel>', self.on_r_mouse_wheel)
         self.rListName.grid(row=5, column=0, sticky='NSWE')
 
         self.rListRate = tk.Listbox(activestyle='none',
             bg='#2B2B2B', fg='#AFBDCC', selectbackground='#2B2B2B',
             selectforeground='#AFBDCC', relief=tk.SUNKEN,
             highlightcolor='#2B2B2B', highlightbackground='#2B2B2B',
-            width=8, height=8, yscrollcommand=self.rYScroll.set)
-        self.rListRate.bind('<MouseWheel>', self.on_mouse_wheel)
+            width=8, height=6, yscrollcommand=self.rYScroll.set)
+        self.rListRate.bind('<MouseWheel>', self.on_r_mouse_wheel)
         self.rListRate.grid(row=5, column=1, sticky='NSWE')
 
         self.rListVol = tk.Listbox(activestyle='none',
             bg='#2B2B2B', fg='#AFBDCC', selectbackground='#2B2B2B',
             selectforeground='#AFBDCC', relief=tk.SUNKEN,
             highlightcolor='#2B2B2B', highlightbackground='#2B2B2B',
-            width=8, height=8, yscrollcommand=self.rYScroll.set)
-        self.rListVol.bind('<MouseWheel>', self.on_mouse_wheel)
+            width=8, height=6, yscrollcommand=self.rYScroll.set)
+        self.rListVol.bind('<MouseWheel>', self.on_r_mouse_wheel)
         self.rListVol.grid(row=5, column=2, sticky='NSWE')
 
     def m_list_update(self):
@@ -220,12 +229,17 @@ class Application(tk.Frame, threading.Thread):
         self.r_list_update()
         self.update()
 
-    def on_vsb(self, *args):
+    def on_m_vsb(self, *args):
         self.mListName.yview(*args)
         self.mListChange.yview(*args)
         self.mListVol.yview(*args)
 
-    def on_mouse_wheel(self, event):
+    def on_r_vsb(self, *args):
+        self.rListName.yview(*args)
+        self.rListRate.yview(*args)
+        self.rListVol.yview(*args)
+
+    def on_m_mouse_wheel(self, event):
         if event.delta < 0:
             self.mListName.yview('scroll', 1, 'units')
             self.mListChange.yview('scroll', 1, 'units')
@@ -236,24 +250,44 @@ class Application(tk.Frame, threading.Thread):
             self.mListVol.yview('scroll', -1, 'units')
         return 'break'
 
-    def create_timers(self):
-        self.timerFrame1Buf = tk.Frame(width=180, height=220, bg='#262626')
-        self.timerFrame1Buf.grid(row=0, rowspan=3, column=5, columnspan=3)
+    def on_r_mouse_wheel(self, event):
+        if event.delta < 0:
+            self.rListName.yview('scroll', 1, 'units')
+            self.rListRate.yview('scroll', 1, 'units')
+            self.rListVol.yview('scroll', 1, 'units')
+        if event.delta > 0:
+            self.rListName.yview('scroll', -1, 'units')
+            self.rListRate.yview('scroll', -1, 'units')
+            self.rListVol.yview('scroll', -1, 'units')
+        return 'break'
 
-        self.timerFrame1 = tk.LabelFrame(width=180, height=176, bg='#262626')
-        self.timerFrame1.grid(row=2, column=5, columnspan=3)
+    def create_timers(self):
+        self.timerFrame1Buf = tk.Frame(width=120, height=42, bg='#262626')
+        self.timerFrame1Buf.grid(row=0, rowspan=2, column=4, columnspan=3)
+
+        self.slowTimerLabel = tk.Label(text='Time until update:',
+            bg='#262626', fg='#AFBDCC')
+        self.slowTimerLabel.grid(row=1, column=4, ipadx=8)
+
+        self.timerFrame1 = tk.LabelFrame(width=120, height=120, bg='#262626')
+        self.timerFrame1.grid(row=2, column=4, columnspan=3)
 
         self.slowTimerDisp = tk.Label(font=('', 20), bg='#262626', fg='#AFBDCC')
-        self.slowTimerDisp.grid(row=2, column=6, sticky='WE')
+        self.slowTimerDisp.grid(row=2, column=4)
 
-        self.timerFrame2Buf = tk.Frame(width=180, height=220, bg='#262626')
-        self.timerFrame2Buf.grid(row=3, rowspan=3, column=5, columnspan=3)
 
-        self.timerFrame2 = tk.LabelFrame(width=180, height=176, bg='#262626')
-        self.timerFrame2.grid(row=5, column=5, columnspan=3)
+        self.timerFrame2Buf = tk.Frame(width=120, height=42, bg='#262626')
+        self.timerFrame2Buf.grid(row=3, rowspan=2, column=4)
+
+        self.fastTimerLabel = tk.Label(text='Time until update:',
+            bg='#262626', fg='#AFBDCC')
+        self.fastTimerLabel.grid(row=4, column=4, ipadx=8)
+
+        self.timerFrame2 = tk.LabelFrame(width=120, height=120, bg='#262626')
+        self.timerFrame2.grid(row=5, column=4, columnspan=3)
 
         self.fastTimerDisp = tk.Label(font=('', 20), bg='#262626', fg='#AFBDCC')
-        self.fastTimerDisp.grid(row=5, column=6, sticky='WE')
+        self.fastTimerDisp.grid(row=5, column=4)
 
     def slow_timer_update(self):
         if self.slowTimerValue == 0:
