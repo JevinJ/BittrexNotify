@@ -7,6 +7,11 @@ import time
 import urllib3
 
 
+LOOKBACK = -9
+MIN_RATE = .2
+MIN_VOL = 350
+
+
 def delete_pickles():
     files = glob.glob('fast_history/*pickle')
     for file in files:
@@ -24,7 +29,7 @@ def open_pickle():
     if not files:
         return []
     files.sort(key=os.path.getmtime)
-    for file in files[-9:]:
+    for file in files[LOOKBACK:]:
         with open(file, 'rb') as f:
             yield pickle.load(f)
 
@@ -40,7 +45,7 @@ def heartbeat():
         name = i['Market']['MarketCurrencyLong']
         last_price = i['Summary']['Last']
         last_vol = i['Summary']['BaseVolume']
-        if i['Market']['BaseCurrency'] == 'BTC' and last_price >= 0.00001000 and last_vol >= 350:
+        if i['Market']['BaseCurrency'] == 'BTC' and last_price >= 0.00001000 and last_vol >= MIN_VOL:
             latest_data[name] = {'Market': i['Market'], 'Summary': i['Summary']}
 
     # Processing all data within 9 ticks + latest and returning
@@ -59,7 +64,7 @@ def heartbeat():
             if prev_changes:
                 volume = latest_data.get(name, {}).get('Summary', {}).get('BaseVolume', 0)
                 average_rate = (sum(prev_changes) / len(prev_changes))
-                if average_rate >= .2:
+                if average_rate >= MIN_RATE:
                     ticker_data.append([name,
                                         float('{:.02f}'.format(average_rate)),
                                         float('{:.02f}'.format(volume))])
