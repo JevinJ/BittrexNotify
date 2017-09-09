@@ -12,6 +12,8 @@ MIN_RATE = .2
 MIN_VOL = 350
 
 
+# This will be called in __init__ for Application class, it will
+#  delete all old pickle files so we start with a clean dataset.
 def delete_pickles():
     files = glob.glob('fast_history/*pickle')
     for file in files:
@@ -24,6 +26,7 @@ def save_pickle(latest_data):
         pickle.dump(latest_data, f, protocol=pickle.HIGHEST_PROTOCOL)
 
 
+# Getting filenames for last(LOOKBACK) pickle files.
 def open_pickle():
     files = glob.glob('fast_history/*pickle')
     if not files:
@@ -70,4 +73,4 @@ def heartbeat():
                                         float('{:.02f}'.format(volume))])
 
     save_pickle(latest_data)
-    return sorted(ticker_data, key=lambda x: x[1], reverse=True)
+    return ticker_data

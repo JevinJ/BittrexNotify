@@ -8,10 +8,13 @@ import urllib3
 
 
 LOOKBACK = -1
+MIN_PRICE = 0.00001000
 MIN_CHANGE = 3
 MIN_VOL = 350
 
 
+# This will be called in __init__ for Application class, it will
+#  delete all old pickle files so we start with a clean dataset.
 def delete_pickles():
     files = glob.glob('slow_history/*pickle')
     for file in files:
@@ -24,6 +27,7 @@ def save_pickle(latest_data):
         pickle.dump(latest_data, f, protocol=pickle.HIGHEST_PROTOCOL)
 
 
+# Getting filenames for last(LOOKBACK) pickle files.
 def open_pickle():
     files = glob.glob('slow_history/*pickle')
     if not files:
@@ -44,7 +48,7 @@ def heartbeat():
         name = i['Market']['MarketCurrencyLong']
         last_price = i['Summary']['Last']
         last_vol = i['Summary']['BaseVolume']
-        if i['Market']['BaseCurrency'] == 'BTC' and last_price >= 0.00001000 and last_vol >= MIN_VOL:
+        if i['Market']['BaseCurrency'] == 'BTC' and last_price >= MIN_PRICE and last_vol >= MIN_VOL:
             latest_data[name] = {'Market': i['Market'], 'Summary': i['Summary']}
 
     # Processing change between prev data and new, returning
@@ -64,4 +68,4 @@ def heartbeat():
                                         float('{:.02f}'.format(volume))])
 
     save_pickle(latest_data)
-    return sorted(ticker_data, key=lambda x: x[1], reverse=True)
+    return ticker_data
