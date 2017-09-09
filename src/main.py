@@ -27,12 +27,12 @@ Variables starting with r(% avg rate) refer to lower section of gui.
 class Application(tk.Frame, threading.Thread):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
-        threading.Thread.__init__(self)
-        self.start()
+        #threading.Thread.__init__(self)
+        #self.start()
         self.grid()
 
-        slowtick.delete_pickles()
-        fasttick.delete_pickles()
+        slowtick.delete_ancient_pickles()
+        fasttick.delete_ancient_pickles()
 
         self.load_media()
         self.m_ticker_data = []
@@ -86,10 +86,13 @@ class Application(tk.Frame, threading.Thread):
         self.rLabelBuf = tk.Frame(width=120, height=42, bg=MAIN_BG)
         self.rLabelBuf.grid(row=3, rowspan=2, column=4)
 
-    # Creates all the buttons in the GUI, the references to the sorting
-    #   buttons will be put into a dictionary along with a reference to
-    #   the sort order and key. The dict is iterated over to reset other
-    #   buttons and the key is used to sort the listbox by the selected button.
+    '''
+    Creates all the buttons in the GUI.
+    m_buttons and r_buttons are used to store: 
+        A reference to the button itself,
+        The direction of the current sort for the button
+        A key for the button clicked to sort the listbox data
+    '''
     def create_buttons(self):
         self.mSortByName = tk.Button(name='mSortByName', image=self.noArrow,
             bg=MAIN_BG, activebackground=CLICKED_BG, relief='raised',
@@ -106,9 +109,9 @@ class Application(tk.Frame, threading.Thread):
             command=lambda: on_click_sort('mSortByVol', self.m_buttons, 'm'))
         self.mSortByVol.grid(row=1, column=2, sticky='NSWE')
 
-        self.m_buttons = {'mSortByName': [self.mSortByName, 'none', 0],
-                          'mSortByChange': [self.mSortByChange, 'desc', 1],
-                          'mSortByVol': [self.mSortByVol, 'none', 2]}
+        self.m_buttons = {self.mSortByName: ['none', 0],
+                          self.mSortByChange: ['desc', 1],
+                          self.mSortByVol: ['none', 2]}
 
         self.mNotifyBell = tk.Button(name='mNotifyBell', image=self.notifyBell,
             bg=MAIN_BG, activebackground=CLICKED_BG, relief='raised',
@@ -136,9 +139,9 @@ class Application(tk.Frame, threading.Thread):
             command=lambda: on_click_sort('rSortByVol', self.r_buttons, 'r'))
         self.rSortByVol.grid(row=4, column=2, sticky='NSWE')
 
-        self.r_buttons = {'rSortByName': [self.rSortByName, 'none', 0],
-                          'rSortByRate': [self.rSortByRate, 'desc', 1],
-                          'rSortByVol': [self.rSortByVol, 'none', 2]}
+        self.r_buttons = {self.rSortByName: ['none', 0],
+                          self.rSortByRate: ['desc', 1],
+                          self.rSortByVol: ['none', 2]}
 
         self.rNotifyBell = tk.Button(name='rNotifyBell', image=self.notifyBell,
             bg=MAIN_BG, activebackground=CLICKED_BG, relief='raised',
@@ -153,32 +156,28 @@ class Application(tk.Frame, threading.Thread):
         # This takes the button dict and resets/changes button images
         #   and sorts the listbox data accordingly.
         def on_click_sort(pressed_name, buttons, caller):
-            for name in buttons:
-                if name == pressed_name:
-                    sort_direction = buttons[name][1]
+            for b_name in buttons:
+                if str(b_name) == ('.' + pressed_name):
+                    sort_direction = buttons[b_name][0]
                     if sort_direction == 'desc':
-                        buttons[name][1] = 'asc'
-                        buttons[name][0].config(image=self.upArrow)
+                        buttons[b_name][0] = 'asc'
+                        b_name.config(image=self.upArrow)
                         if caller == 'm':
-                            self.m_ticker_data = sorted(self.m_ticker_data,
-                                key=lambda x: x[buttons[name][2]])
+                            self.m_ticker_data.sort(key=lambda x: x[buttons[b_name][1]])
                         if caller == 'r':
-                            self.r_ticker_data = sorted(self.r_ticker_data,
-                                key=lambda x: x[buttons[name][2]])
+                            self.r_ticker_data.sort(key=lambda x: x[buttons[b_name][1]])
                     if sort_direction == 'asc' or sort_direction == 'none':
-                        buttons[name][1] = 'desc'
-                        buttons[name][0].config(image=self.downArrow)
+                        buttons[b_name][0] = 'desc'
+                        b_name.config(image=self.downArrow)
                         if caller == 'm':
-                            self.m_ticker_data = sorted(self.m_ticker_data,
-                                key=lambda x: x[buttons[name][2]],
-                                reverse=True)
+                            self.m_ticker_data.sort(key=lambda x: x[buttons[b_name][1]],
+                                                    reverse=True)
                         if caller == 'r':
-                            self.r_ticker_data = sorted(self.r_ticker_data,
-                                key=lambda x: x[buttons[name][2]],
-                                reverse=True)
+                            self.r_ticker_data.sort(key=lambda x: x[buttons[b_name][1]],
+                                                    reverse=True)
                 else:
-                    buttons[name][1] = 'none'
-                    buttons[name][0].config(image=self.noArrow)
+                    buttons[b_name][0] = 'none'
+                    b_name.config(image=self.noArrow)
             self.output_ticker(caller)
             self.update()
 
@@ -344,45 +343,41 @@ class Application(tk.Frame, threading.Thread):
             self.mListName.delete(0, tk.END)
             self.mListChange.delete(0, tk.END)
             self.mListVol.delete(0, tk.END)
-            if self.m_ticker_data:
-                for name in self.m_buttons:
-                    if self.m_buttons[name][1] == 'desc':
-                        self.m_ticker_data = sorted(self.m_ticker_data,
-                                                    key=lambda x: x[self.m_buttons[name][2]],
-                                                    reverse=True)
-                    if self.m_buttons[name][1] == 'asc':
-                        self.m_ticker_data = sorted(self.m_ticker_data,
-                                                    key=lambda x: x[self.m_buttons[name][2]])
-                for i in self.m_ticker_data:
-                    self.mListName.insert(tk.END, i[0])
-                    self.mListChange.insert(tk.END, '{}{}{}'.format('+', i[1], '%'))
-                    self.mListVol.insert(tk.END, i[2])
+            for i in self.m_ticker_data:
+                self.mListName.insert(tk.END, i[0])
+                self.mListChange.insert(tk.END, '{}{}{}'.format('+', i[1], '%'))
+                self.mListVol.insert(tk.END, i[2])
         if caller == 'r':
             self.rListName.delete(0, tk.END)
             self.rListRate.delete(0, tk.END)
             self.rListVol.delete(0, tk.END)
-            if self.r_ticker_data:
-                for name in self.r_buttons:
-                    if self.r_buttons[name][1] == 'desc':
-                        self.r_ticker_data = sorted(self.r_ticker_data,
-                                                    key=lambda x: x[self.r_buttons[name][2]],
-                                                    reverse=True)
-                    if self.r_buttons[name][1] == 'asc':
-                        self.r_ticker_data = sorted(self.r_ticker_data,
-                                                    key=lambda x: x[self.r_buttons[name][2]])
-                for i in self.r_ticker_data:
-                    self.rListName.insert(tk.END, i[0])
-                    self.rListRate.insert(tk.END, '{}{}{}'.format('+', i[1], '%'))
-                    self.rListVol.insert(tk.END, i[2])
+            for i in self.r_ticker_data:
+                self.rListName.insert(tk.END, i[0])
+                self.rListRate.insert(tk.END, '{}{}{}'.format('+', i[1], '%'))
+                self.rListVol.insert(tk.END, i[2])
+        self.update()
 
-    def ticker_data_update(self, caller):
+    def update_ticker_data(self, caller):
         if caller == 'm':
             self.m_ticker_data = slowtick.heartbeat()
+            if self.m_ticker_data:
+                for b_name in self.m_buttons:
+                    if self.m_buttons[b_name][0] == 'desc':
+                        self.m_ticker_data.sort(key=lambda x: x[self.m_buttons[name][1]],
+                                                reverse=True)
+                    if self.m_buttons[b_name][0] == 'asc':
+                        self.m_ticker_data.sort(key=lambda x: x[self.m_buttons[name][1]])
             self.output_ticker('m')
         if caller == 'r':
             self.r_ticker_data = fasttick.heartbeat()
+            if self.r_ticker_data:
+                for b_name in self.r_buttons:
+                    if self.r_buttons[b_name][0] == 'desc':
+                        self.r_ticker_data.sort(key=lambda x: x[self.r_buttons[b_name][1]],
+                                                reverse=True)
+                    if self.r_buttons[b_name][0] == 'asc':
+                        self.r_ticker_data.sort(key=lambda x: x[self.r_buttons[b_name][1]])
             self.output_ticker('r')
-        self.update()
 
     def create_timers(self):
         self.slowTimerLabel = tk.Label(text='Time until update:',
@@ -408,7 +403,7 @@ class Application(tk.Frame, threading.Thread):
 
     def slow_timer_update(self):
         if self.slowTimerValue == 0:
-            self.ticker_data_update('m')
+            self.update_ticker_data('m')
             self.slowTimerValue = SLOWTICK_RATE
             if self.mNotifyIsActive and self.m_ticker_data:
                 playsound('media/notification_sound.mp3')
@@ -425,7 +420,7 @@ class Application(tk.Frame, threading.Thread):
 
     def fast_timer_update(self):
         if self.fastTimerValue == 0:
-            self.ticker_data_update('r')
+            self.update_ticker_data('r')
             self.fastTimerValue = FASTTICK_RATE
             if self.rNotifyIsActive and self.r_ticker_data:
                 playsound('media/notification_sound.mp3')
