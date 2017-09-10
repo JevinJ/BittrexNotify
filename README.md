@@ -59,17 +59,19 @@ main.py
 slowtick.py
 ```
 Open a terminal/command prompt in the /src/ folder and type:
+
 Terminal:
 ```
 python3 main.py
 ```
 
-Command Promps:
+Command Prompt:
 ```
 python main.py
 ```
 
 ###Usage
+
 '''
 On first run for all listboxes, if there is any new data it will be updated to the box after the second cycle.
 Both windows will only show coins with volumes >= 350 BTC
