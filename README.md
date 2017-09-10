@@ -36,7 +36,7 @@ pip3 install certifi
 
 Optional:
 ```
-Unzip and run always-on-top downloaded from here[(https://www.labnol.org/software/tutorials/keep-window-always-on-top/5213/)]
+Unzip and run always-on-top downloaded from [here](https://www.labnol.org/software/tutorials/keep-window-always-on-top/5213/)]
 Once Bittrex-Notify and always-on-top are running press Ctrl+Space with the Bittrex-Notify window selected to keep it on top.
 ```
 
