@@ -7,16 +7,16 @@ GUI for sorting/filtering/notification of coins which are increasing in price. C
 Python 3+
 
 Libraries:
-
+```
 playsound
-
 urllib3
-
 certifi
+```
 
 Optional:
-
+```
 always-on-top(uses Autohotkey) or other program that will keep windows on top.
+```
 
 ### Installing
 
