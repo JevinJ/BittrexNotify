@@ -7,11 +7,15 @@ GUI for sorting/filtering/notification of coins which are increasing in price. C
 Python 3+
 
 Libraries:
+
 playsound
+
 urllib3
+
 certifi
 
 Optional:
+
 always-on-top(uses Autohotkey) or other program that will keep windows on top.
 
 ### Installing
@@ -70,16 +74,16 @@ Command Prompt:
 python main.py
 ```
 
-###Usage
+### Usage
 
-'''
+```
 On first run for all listboxes, if there is any new data it will be updated to the box after the second cycle.
 Both windows will only show coins with volumes >= 350 BTC
 The first window cycles every 10 minutes and shows changes >= 3% and coins with price >= .00001000.
 The second window cycles every 15 seconds and shows average rate >= .2%.
 You can press the bell button to play a sound when the box updates, if it has any data to update on.
 This program will not give 100% accurate reccomendations or certainty that the price will continue to increase. You should use your own judgement and research on Bittrex to choose which coins to invest in or avoid.
-'''
+```
 
 ## Authors
 
