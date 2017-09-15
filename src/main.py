@@ -1,6 +1,5 @@
 from playsound import playsound
 import tkinter as tk
-import threading
 import fasttick
 import slowtick
 
@@ -24,11 +23,9 @@ Variables starting with r(% avg rate) refer to lower section of gui.
     rList is calculated every (FASTTICK_RATE, in seconds) over
     10 pickle data files in the past
 '''
-class Application(tk.Frame, threading.Thread):
+class Application(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
-        #threading.Thread.__init__(self)
-        #self.start()
         self.grid()
 
         slowtick.delete_ancient_pickles()
@@ -37,8 +34,6 @@ class Application(tk.Frame, threading.Thread):
         self.load_media()
         self.m_ticker_data = []
         self.r_ticker_data = []
-        self.slowTimerValue = SLOWTICK_RATE
-        self.fastTimerValue = FASTTICK_RATE
 
         self.create_labels()
         self.create_buttons()
@@ -46,6 +41,8 @@ class Application(tk.Frame, threading.Thread):
         self.rNotifyIsActive = False
         self.create_lists()
         self.create_timers()
+        self.slowTimerValue = SLOWTICK_RATE
+        self.fastTimerValue = FASTTICK_RATE
 
         self.slow_timer_update()
         self.fast_timer_update()
@@ -194,10 +191,10 @@ class Application(tk.Frame, threading.Thread):
             if caller == 'r':
                 if self.rNotifyBell.cget('relief') == 'raised':
                     self.rNotifyBell.config(relief='sunken')
-                    self.mNotifyIsActive = True
+                    self.rNotifyIsActive = True
                 else:
                     self.rNotifyBell.config(relief='raised')
-                    self.mNotifyIsActive = False
+                    self.rNotifyIsActive = False
 
         def on_click_help(caller):
             helpWindow = tk.Toplevel()
@@ -363,10 +360,10 @@ class Application(tk.Frame, threading.Thread):
             if self.m_ticker_data:
                 for b_name in self.m_buttons:
                     if self.m_buttons[b_name][0] == 'desc':
-                        self.m_ticker_data.sort(key=lambda x: x[self.m_buttons[name][1]],
+                        self.m_ticker_data.sort(key=lambda x: x[self.m_buttons[b_name][1]],
                                                 reverse=True)
                     if self.m_buttons[b_name][0] == 'asc':
-                        self.m_ticker_data.sort(key=lambda x: x[self.m_buttons[name][1]])
+                        self.m_ticker_data.sort(key=lambda x: x[self.m_buttons[b_name][1]])
             self.output_ticker('m')
         if caller == 'r':
             self.r_ticker_data = fasttick.heartbeat()
@@ -431,5 +428,3 @@ class Application(tk.Frame, threading.Thread):
 
 app = Application()
 app.master.title('BittrexNotify')
-
-
