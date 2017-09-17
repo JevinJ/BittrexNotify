@@ -2,6 +2,7 @@
 
 GUI for sorting/filtering/notification of coins which are increasing in price. Can be used as an aid in locating short term investments. Written in/for Python 3+
 
+![Bittrex-NotifyGUI](https://github.com/JevinJ/Bittrex-Notify/blob/master/BittrexNotifyGUI.jpg?raw=true)
 ### Prerequisites
 
 Python 3+
