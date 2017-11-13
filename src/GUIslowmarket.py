@@ -199,7 +199,7 @@ class SlowMarket:
         self.app.after(1000, self.timer_update)
 
     def update_slow_ticker_data(self):
-        self.slow_ticker_data = slowtick.heartbeat()
+        self.slow_ticker_data = slowtick.heartbeat(self.cfg)
         if self.slow_ticker_data:
             for b_name in self.slowButtons:
                 if self.slowButtons[b_name][0] == 'desc':
