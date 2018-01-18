@@ -110,7 +110,6 @@ def open_pickles(folder_name='', lookback=0):
     if not files:
         return {}
     if len(files) > lookback:
-        [print(f) for f in files[len(files)-lookback:]]
         files = [f for f in files[len(files)-lookback:]]
     for file in files:
         with open(file, 'rb') as f:
