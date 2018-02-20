@@ -8,41 +8,33 @@ GUI for sorting/filtering/notification of coins which are increasing in price. C
 Python 3+
 
 Libraries:
-```
-playsound
-urllib3
-certifi
-```
+* playsound
+* urllib3
+* certifi
 
-Optional:
-```
-always-on-top(uses Autohotkey) or other program that will keep windows on top.
-```
+
+Optional for windows:
+* always-on-top(uses Autohotkey) or other program that will keep windows on top.
+
 
 ### Installing
 
-Install playsound Via pip3
+Install playsound via pip3
 ```
 In terminal/command prompt type:
 pip3 install playsound
 ```
 
-Install urllib3 Via pip3
+Install urllib3 via pip3
 ```
 In terminal/command prompt type:
 pip3 install urllib3
 ```
 
-Install certifi Via pip3
+Install certifi via pip3
 ```
 In terminal/command prompt type:
 pip3 install certifi
-```
-
-Optional:
-```
-Unzip and run always-on-top downloaded from [here](https://www.labnol.org/software/tutorials/keep-window-always-on-top/5213/)]
-Once Bittrex-Notify and always-on-top are running press Ctrl+Space with the Bittrex-Notify window selected to keep it on top.
 ```
 
 ### Running
@@ -57,13 +49,7 @@ media
 slow_history
 ```
 
-Python files:
-```
-fasttick.py
-main.py
-slowtick.py
-```
-Open a terminal/command prompt in the /src/ folder and type:
+Open a terminal/command prompt in the /src/ folder and double click on main.py or type:
 
 Terminal:
 ```
@@ -75,13 +61,19 @@ Command Prompt:
 python main.py
 ```
 
+Optional for windows - Run always-on-top:
+```
+Unzip and run always-on-top downloaded from [here](https://www.labnol.org/software/tutorials/keep-window-always-on-top/5213/)]
+Once BittrexNotify and always-on-top are running press Ctrl+Space with the BittrexNotify window selected to keep it on top.
+```
+
 ### Usage
 
 ```
 On first run for all listboxes, if there is any new data it will be updated to the box after the second cycle.
 Both windows will only show coins with volumes >= 350 BTC
 The first window cycles every 10 minutes and shows changes >= 3% and coins with price >= .00001000.
-The second window cycles every 15 seconds and shows average rate >= .2%.
+The second window cycles every 20 seconds and shows average rate >= .45%.
 You can press the bell button to play a sound when the box updates, if it has any data to update on.
 This program will not give 100% accurate reccomendations or certainty that the price will continue to increase. You should use your own judgement and research on Bittrex to choose which coins to invest in or avoid.
 ```
