@@ -3,7 +3,7 @@ Graphical interface for sorting/filtering/notification of coins which are increa
 
 ![BittrexNotifyGUI](https://github.com/JevinJ/BittrexNotify/blob/master/BittrexNotifyGUI.jpg?raw=true)
 ### Prerequisites
-Python 3+
+[Python3.6+](https://www.python.org/downloads/)
 
 Libraries:
 * playsound
@@ -11,7 +11,7 @@ Libraries:
 * certifi
 
 Optional for windows:
-* always-on-top(uses Autohotkey) or other program that will keep windows on top.
+* [always-on-top](www.labnol.org/software/tutorials/keep-window-always-on-top/5213)(uses Autohotkey) or other program that will keep windows on top.
 
 ### Installing
 Using terminal/command prompt:
@@ -50,7 +50,7 @@ Terminal: python3 main.py
 
 Optional for windows - Run always-on-top:
 ```
-Unzip and run always-on-top downloaded from [here](https://www.labnol.org/software/tutorials/keep-window-always-on-top/5213/)]
+Unzip and run always-on-top.
 Once BittrexNotify and always-on-top are running press Ctrl+Space with the BittrexNotify window selected to keep it on top.
 ```
 
