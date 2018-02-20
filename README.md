@@ -14,21 +14,20 @@ Optional for windows:
 * always-on-top(uses Autohotkey) or other program that will keep windows on top.
 
 ### Installing
+Using terminal/command prompt:
+
 Install playsound via pip3
 ```
-In terminal/command prompt type:
 pip3 install playsound
 ```
 
 Install urllib3 via pip3
 ```
-In terminal/command prompt type:
 pip3 install urllib3
 ```
 
 Install certifi via pip3
 ```
-In terminal/command prompt type:
 pip3 install certifi
 ```
 
