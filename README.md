@@ -1,10 +1,8 @@
-# Bittrex-Notify GUI
+# BittrexNotify GUI
+Graphical interface for sorting/filtering/notification of coins which are increasing in price. Can be used as an aid in locating short term investments.
 
-GUI for sorting/filtering/notification of coins which are increasing in price. Can be used as an aid in locating short term investments. Written in/for Python 3+
-
-![Bittrex-NotifyGUI](https://github.com/JevinJ/Bittrex-Notify/blob/master/BittrexNotifyGUI.jpg?raw=true)
+![BittrexNotifyGUI](https://github.com/JevinJ/BittrexNotify/blob/master/BittrexNotifyGUI.jpg?raw=true)
 ### Prerequisites
-
 Python 3+
 
 Libraries:
@@ -12,13 +10,10 @@ Libraries:
 * urllib3
 * certifi
 
-
 Optional for windows:
 * always-on-top(uses Autohotkey) or other program that will keep windows on top.
 
-
 ### Installing
-
 Install playsound via pip3
 ```
 In terminal/command prompt type:
@@ -38,7 +33,6 @@ pip3 install certifi
 ```
 
 ### Running
-
 Download or clone the repository.
 In the download location make sure you have in the /src/ folder:
 
@@ -49,16 +43,10 @@ media
 slow_history
 ```
 
-Open a terminal/command prompt in the /src/ folder and double click on main.py or type:
-
-Terminal:
+Double click on main.py or open a terminal/command prompt in the /src/ folder and type:
 ```
-python3 main.py
-```
-
-Command Prompt:
-```
-python main.py
+CMD: python main.py
+Terminal: python3 main.py
 ```
 
 Optional for windows - Run always-on-top:
@@ -68,7 +56,6 @@ Once BittrexNotify and always-on-top are running press Ctrl+Space with the Bittr
 ```
 
 ### Usage
-
 ```
 On first run for all listboxes, if there is any new data it will be updated to the box after the second cycle.
 Both windows will only show coins with volumes >= 350 BTC
