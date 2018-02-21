@@ -50,12 +50,11 @@ def retrieve_data():
         try:
             data = response.json()
         except Exception as exc:
-            #print(exc)
             time.sleep(10)
     return data
 
 
-def delete_ancient_pickles(folder_name='', amount_to_keep=0):
+def delete_ancient_pickles(folder_name, amount_to_keep=0):
     """
     Deletes pickle files in a given folder up to a given amount of the latest files.
     :param folder_name: name of folder where pickle files are stored,
@@ -63,9 +62,7 @@ def delete_ancient_pickles(folder_name='', amount_to_keep=0):
     :param amount_to_keep: amount of files to keep, default is to delete all.
     :return: None
     """
-    if not folder_name:
-        raise ValueError('folder_name cannot be empty')
-    if not os.path.exists(f'{folder_name}'):
+    if not os.path.exists(f'{folder_name}') or not os.path.lexists(f'{folder_name}'):
         raise ValueError('folder does not exist or incorrect folder name')
 
     files = glob.glob(f'{folder_name}/*pickle')
@@ -74,7 +71,7 @@ def delete_ancient_pickles(folder_name='', amount_to_keep=0):
         os.remove(f)
 
 
-def save_pickle(latest_data, folder_name=''):
+def save_pickle(latest_data, folder_name):
     """
     Saves a dictionary as a pickle file in the given folder.
     :param latest_data: a dictionary to be serialized.
@@ -82,9 +79,7 @@ def save_pickle(latest_data, folder_name=''):
                         without slashes. eg('fasttick_history')
     :return: None
     """
-    if not folder_name:
-        raise ValueError('folder_name cannot be empty')
-    if not os.path.exists(f'{folder_name}'):
+    if not os.path.exists(f'{folder_name}') or not os.path.lexists(f'{folder_name}'):
         raise ValueError('folder does not exist or incorrect folder name')
 
     date_time = time.strftime('%M-%S', time.localtime())
@@ -92,7 +87,7 @@ def save_pickle(latest_data, folder_name=''):
         pickle.dump(latest_data, f, protocol=pickle.HIGHEST_PROTOCOL)
 
 
-def open_pickles(folder_name='', lookback=0):
+def open_pickles(folder_name, lookback=0):
     """
     Yields dictionaries from pickle files in a folder.
     :param folder_name: name of folder where pickle files are stored,
@@ -100,9 +95,7 @@ def open_pickles(folder_name='', lookback=0):
     :param lookback: how far back from the newest file in the folder to search.
     :return: yields dictionaries
     """
-    if not folder_name:
-        raise ValueError('folder_name cannot be empty')
-    if not os.path.exists(f'{folder_name}'):
+    if not os.path.exists(f'{folder_name}') or not os.path.lexists(f'{folder_name}'):
         raise ValueError('folder does not exist or incorrect folder name')
 
     files = glob.glob(f'{folder_name}/*pickle')
