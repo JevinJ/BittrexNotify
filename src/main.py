@@ -21,5 +21,6 @@ class Application(tk.Frame):
 
         self.mainloop()
 
-app = Application()
-app.master.title('BittrexNotify')
+if __name__ == '__main__':
+    app = Application()
+    app.master.title('BittrexNotify')
