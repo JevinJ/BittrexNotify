@@ -23,11 +23,6 @@ class Application(QMainWindow):
         status_bar.addWidget(website_select_label)
         status_bar.addWidget(website_select_box, stretch=1)
 
-        top_layout = QHBoxLayout()
-        top_layout.addWidget(website_select_label)
-        top_layout.addWidget(website_select_box)
-        top_layout.addStretch(1)
-
         self.show()
 
 
