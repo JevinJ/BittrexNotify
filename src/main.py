@@ -1,6 +1,4 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QLabel, QComboBox, QHBoxLayout, QGridLayout
-from PyQt5.QtGui import QIcon
-
 
 class Application(QMainWindow):
     def __init__(self):
@@ -11,12 +9,10 @@ class Application(QMainWindow):
         self.setWindowTitle('Coin Monitor')
         self.setGeometry(300, 300, 350, 200)
 
-        exit_action = QAction(QIcon('exit24.png'), 'Exit', self)
+        exit_action = QAction('Exit', self)
         exit_action.setShortcut('Ctrl+Q')
-        exit_action.setStatusTip('Exit application')
         exit_action.triggered.connect(self.close)
 
-        menu_bar = self.menuBar()
         file_menu = menu_bar.addMenu('File')
         file_menu.addAction(exit_action)
 
