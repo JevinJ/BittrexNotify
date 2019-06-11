@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QLabel, QComboBox, QHBoxLayout, QGridLayout, QWidget, QToolBar
+from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QLabel, QComboBox
 
 class Application(QMainWindow):
     def __init__(self):
@@ -20,10 +20,12 @@ class Application(QMainWindow):
         website_select_box.addItems(['Bittrex', 'Binance'])
         website_select_label = QLabel("Website:")
         website_select_label.setBuddy(website_select_box)
+
         tool_bar.addWidget(website_select_label)
         tool_bar.addWidget(website_select_box)
 
         self.show()
+
 
 if __name__ == '__main__':
     import sys
