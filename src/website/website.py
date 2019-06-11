@@ -8,8 +8,9 @@ class Website:
     def api_address(self) -> str:
         return self._api_address
 
-    def get_summary(self) -> dict:
-        pass
+    @property
+    def summary(self) -> dict:
+        return self._get()
 
     def _get(self):
         response = requests.get(self.api_address)
