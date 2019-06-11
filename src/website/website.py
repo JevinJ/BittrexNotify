@@ -10,9 +10,9 @@ class Website:
 
     @property
     def summary(self) -> dict:
-        return self._get()
+        return self._get_summary()
 
-    def _get(self):
+    def _get_summary(self):
         response = requests.get(self.api_address)
         response.raise_for_status()
         return response.json()
