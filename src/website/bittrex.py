@@ -1,4 +1,6 @@
 from .website import Website
 
 class Bittrex(Website):
-    pass
+    def __init__(self):
+        super().__init__(api_address='https://api.bittrex.com/v3/markets/summaries')
+
