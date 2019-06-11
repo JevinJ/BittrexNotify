@@ -6,8 +6,7 @@ class Website:
 
     def get(self):
         response = requests.get(self.api_address)
-        if response.status_code != 200:
-            raise ConnectionError(f'Failed to connect with api, status code: {response.status_code}')
+        response.raise_for_status()
         return response
 
     @property
