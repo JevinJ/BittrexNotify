@@ -1,0 +1,7 @@
+bittrex:
+  GET_markets_url: https://api.bittrex.com/v3/markets
+  GET_market_summary_url: https://api.bittrex.com/v3/markets/summaries
+  GET_market_symbol_url: https://api.bittrex.com/v3/markets/{market_symbol}
+  GET_market_symbol_summary_url: https://api.bittrex.com/v3/markets/{market_symbol}/summary
+
+binance:
