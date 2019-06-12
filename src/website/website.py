@@ -13,8 +13,9 @@ class Website:
             self._GET_market_symbol_summary_url = site_config['GET_market_symbol_summary_url']
 
     @property
-    def summary(self) -> list:
+    def markets_summary(self) -> dict:
         return requests_get(self._GET_markets_summary_url)
+
 
 
 
