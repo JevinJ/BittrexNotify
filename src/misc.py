@@ -5,53 +5,10 @@ import time
 import os
 
 
-def retrieve_data():
-    """
-    Grabs json data from Bittrex.
-    :return: a dictionary containing:
-            {'success': (True/False), 'message': '',
-             'result': [{'Market': {'MarketCurrency': SHORT_COIN_NAME,
-                                    'BaseCurrency': BTC/ETC,
-                                    'MarketCurrencyLong': FULL_COIN_NAME,
-                                    'BaseCurrencyLong': Bitcoin/Ethereum,
-                                    'MinTradeSize': 0.0,
-                                    'MarketName': (BTC/ETH)-SHORT_COIN_NAME,
-                                    'IsActive': True/False,
-                                    'Created': Coin creation date,
-                                    'Notice': '',
-                                    'IsSponsored': None,
-                                    'LogoUrl': Coin logo image url},
-                        {'Summary': {'MarketName': as above,
-                                     'High': 0.0 or Sci-notation,
-                                     'Low': 0.0 or Sci-notation,
-                                     'Volume': 0.0 or Sci-notation,
-                                     'Last': 0.0 or Sci-notation,
-                                     'BaseVolume': 0.0 or Sci-notation,
-                                     'TimeStamp': time this data was scraped,
-                                     'Bid': 0.0 or Sci-notation,
-                                     'Ask': 0.0 or Sci-notation,
-                                     'OpenBuyOrders': 0,
-                                     'OpenSellOrders': 0,
-                                     'PrevDay': 0.0 or Sci-notation,
-                                     'Created': as above,
-                                     'IsVerified': True/False}]}
-    """
-    url = 'https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries'
-    response = None
-    while response is None:
-        try:
-            response = requests.get(url)
-            response.raise_for_status()
-        except (requests.exceptions.HTTPError, Exception):
-            time.sleep(3)
-            response = None
-    data = None
-    while data is None:
-        try:
-            data = response.json()
-        except Exception as exc:
-            time.sleep(10)
-    return data
+def requests_get(url):
+    response = requests.get(url)
+    response.raise_for_status()
+    return response.json()
 
 
 def delete_ancient_pickles(folder_name, amount_to_keep=0):
