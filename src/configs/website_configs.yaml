@@ -12,7 +12,7 @@ binance:
 
 poloniex:
   GET_markets_url:
-  GET_markets_summary_url:
+  GET_markets_summary_url: https://poloniex.com/public?command=returnTicker
   GET_market_symbol_url:
   GET_market_symbol_summary_url:
 
