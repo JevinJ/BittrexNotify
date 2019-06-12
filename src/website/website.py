@@ -4,7 +4,7 @@ import yaml
 class Website:
     def __init__(self, website_name):
         website_name = website_name.lower()
-        with open('websites.yaml') as website_configs:
+        with open('configs/website_configs.yaml') as website_configs:
             site_config = yaml.load(website_configs)[website_name]
             self._GET_markets_url = site_config['GET_markets_url']
             self._GET_markets_summary_url = site_config['GET_markets_summary_url']
