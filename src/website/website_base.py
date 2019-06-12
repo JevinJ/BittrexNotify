@@ -2,7 +2,7 @@ from misc import requests_get
 import yaml
 
 
-class Website:
+class WebsiteBase:
     def __init__(self, website_name):
         website_name = website_name.lower()
         with open('configs/website_configs.yaml') as website_configs:
