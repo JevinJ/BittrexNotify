@@ -1,5 +1,6 @@
-import requests
+from misc import requests_get
 import yaml
+
 
 class Website:
     def __init__(self, website_name):
@@ -13,12 +14,7 @@ class Website:
 
     @property
     def summary(self) -> list:
-        return self._get_summary()
-
-    def _get_summary(self):
-        response = requests.get(self._GET_markets_summary_url)
-        response.raise_for_status()
-        return response.json()
+        return requests_get(self._GET_markets_summary_url)
 
 
 
