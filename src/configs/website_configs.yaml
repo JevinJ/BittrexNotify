@@ -5,3 +5,14 @@ bittrex:
   GET_market_symbol_summary_url: https://api.bittrex.com/v3/markets/{market_symbol}/summary
 
 binance:
+  GET_markets_url:
+  GET_markets_summary_url:
+  GET_market_symbol_url:
+  GET_market_symbol_summary_url:
+
+poloniex:
+  GET_markets_url:
+  GET_markets_summary_url:
+  GET_market_symbol_url:
+  GET_market_symbol_summary_url:
+
